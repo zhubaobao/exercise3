@@ -2,7 +2,7 @@
 // Generated on Tue Jun 19 2018 23:48:31 GMT+0800 (CST)
 
 module.exports = function(config) {
-  config.set({
+  var configuration = ({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -49,7 +49,7 @@ module.exports = function(config) {
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
-
+    
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
@@ -57,9 +57,14 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'ChromeCanary'],
 
-
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false,
@@ -68,4 +73,8 @@ module.exports = function(config) {
     // how many browser should be started simultaneous
     concurrency: Infinity
   })
+    if(process.env.TRAVIS){
+        configuration.browsers = ['Chrome_travis_ci'];
+      }
+      config.set(configuration);
 }
